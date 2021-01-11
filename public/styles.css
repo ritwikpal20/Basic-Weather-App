@@ -21,7 +21,20 @@ body {
     margin: auto;
     width: 50%;
 }
+.card {
+    width: 18rem;
+}
+.card-img-top {
+    width: 100px;
+    display: inline-block;
+    margin: auto;
+}
 
+@media (max-width: 450px) {
+    .card {
+        width: 10rem;
+    }
+}
 @media (max-width: 1000px) {
     .input-group {
         width: 100%;

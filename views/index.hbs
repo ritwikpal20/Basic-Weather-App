@@ -24,11 +24,20 @@
                 <button class="btn btn-dark" type="submit" id="button-addon2">Search</button>
             </div>
         </form>
-        {{#if city}}
-        <h2>{{city}}</h2>
-        <h1>{{weatherDescription}}</h1>
+        {{#if city }}
+        <div class="card m-auto">
+            <img src="{{imageUrl}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{city}} ,<span class="text-muted text-small">{{country}}</span></h5>
+                <p class="card-text">
+                    {{weatherDescription}}
+                </p>
+                <p class="card-footer"> <b>Temp:</b> {{temp}} <sup>o</sup>C</p>
+            </div>
+        </div>
+        {{else}}
+        <h1>No City Found</h1>
         {{/if}}
-
     </div>
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
