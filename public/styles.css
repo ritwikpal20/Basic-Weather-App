@@ -1,0 +1,29 @@
+body {
+    height: 100vh;
+    margin: 2rem;
+    padding: 2rem;
+    /* overflow: hidden; */
+    background-image: linear-gradient(
+        to right top,
+        #051937,
+        #004d7a,
+        #008793,
+        #00bf72,
+        #a8eb12
+    );
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.container {
+    text-align: center;
+}
+.input-group {
+    margin: auto;
+    width: 50%;
+}
+
+@media (max-width: 1000px) {
+    .input-group {
+        width: 100%;
+    }
+}
