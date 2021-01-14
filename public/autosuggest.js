@@ -1,26 +1,56 @@
+//Default center location at Kharagpur
+lt = 22.9867569;
+lg = 87.8549755;
+//give location access for better auto suggest result
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+        lt = position.coords.latitude;
+        lg = position.coords.longitude;
+    });
+}
+
+//Auto suggest everytime user changes the city value
 $(".input-city").keyup(() => {
     city = $(".input-city").val();
     $.get(
-        `https://autosuggest.search.hereapi.com/v1/autosuggest?at=22.9867569,87.8549755&limit=5&lang=en&q=${city}&apiKey=qFwzkhP7AxO51L2e85jGvvZOJT6SaUg-MeEJg6wn9Y4`,
+        `https://autosuggest.search.hereapi.com/v1/autosuggest?at=${lt},${lg}&limit=5&lang=en&q=${city}&apiKey=qFwzkhP7AxO51L2e85jGvvZOJT6SaUg-MeEJg6wn9Y4`,
         (data) => {
             $(".suggestions").empty();
             for (let i = 0; i < data.items.length; i++) {
                 $(".suggestions").append(
-                    `<li class="list-group-item suggested-place">${data.items[i].title}</li>`
+                    `<li class="list-group-item suggested-place" data-latitude=${data.items[i].position.lat} data-longitude=${data.items[i].position.lng}>${data.items[i].title}</li>`
                 );
-                $(".suggested-place").click((event) => {
-                    $(".input-city").val($(event.target).text());
-                    $(".suggestions").empty();
-                });
             }
+            $(".suggested-place").click((event) => {
+                $(".input-city").val($(event.target).text());
+                $.post(
+                    "/",
+                    {
+                        city_name: $(".input-city").val(),
+                        lat: $(event.target).data("latitude"),
+                        lng: $(event.target).data("longitude"),
+                    },
+                    () => {
+                        window.location.replace("/");
+                    }
+                );
+                $(".suggestions").empty();
+            });
         }
     );
 });
 $(".input-city").keypress((event) => {
     var keycode = event.keyCode ? event.keyCode : event.which;
     if (keycode == "13") {
-        $(".form").submit();
+        $.post("/", { city_name: $(".input-city").val() }, () => {
+            window.location.replace("/");
+        });
     }
+});
+$("#btnSearch").click(() => {
+    $.post("/", { city_name: $(".input-city").val() }, () => {
+        window.location.replace("/");
+    });
 });
 
 setInterval(() => {

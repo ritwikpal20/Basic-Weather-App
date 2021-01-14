@@ -20,34 +20,56 @@ app.use(
     })
 );
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+    //if the user already has a city name or latitude,longitude saved in cookie , show temperation of that city by default
     if (req.session.visit) {
+        if (req.session.lat & req.session.lng) {
+            url = `https://api.openweathermap.org/data/2.5/weather?lat=${req.session.lat}&lon=${req.session.lng}&appid=${process.env.API_KEY}&units=metric`;
+        } else if (req.session.city) {
+            url = `https://api.openweathermap.org/data/2.5/weather?q=${req.session.city}&appid=${process.env.API_KEY}&units=metric`;
+        }
+        await https.get(url, (response) => {
+            response.on("data", function (data) {
+                const weatherData = JSON.parse(data);
+                if (weatherData.cod == "404" || weatherData.cod == "400") {
+                    req.session.city = null;
+                } else {
+                    req.session.weatherDescription =
+                        weatherData.weather[0].description;
+                    req.session.imageUrl = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
+                    req.session.temp = weatherData.main.temp;
+                }
+            });
+        });
         res.render("index", {
             city: req.session.city,
             weatherDescription: req.session.weatherDescription,
             imageUrl: req.session.imageUrl,
             temp: req.session.temp,
             country: req.session.country,
+            location: req.session.location,
         });
     } else {
         req.session.visit = true;
-        req.session.city = "";
-        req.session.weatherDescription = "";
-        req.session.imageUrl = "";
-        req.session.temp = "";
-        req.session.country = "";
         res.render("index");
     }
 });
 
 app.post("/", (req, res) => {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${req.body.city_name}&appid=${process.env.API_KEY}&units=metric`;
+    if (req.body.lat & req.body.lng) {
+        url = `https://api.openweathermap.org/data/2.5/weather?lat=${req.body.lat}&lon=${req.body.lng}&appid=${process.env.API_KEY}&units=metric`;
+    } else {
+        url = `https://api.openweathermap.org/data/2.5/weather?q=${req.body.city_name}&appid=${process.env.API_KEY}&units=metric`;
+    }
     https.get(url, (response) => {
         response.on("data", function (data) {
             const weatherData = JSON.parse(data);
             if (weatherData.cod == "404" || weatherData.cod == "400") {
                 req.session.city = null;
             } else {
+                req.session.location = req.body.city_name;
+                req.session.lat = req.body.lat;
+                req.session.lng = req.body.lng;
                 req.session.city = weatherData.name;
                 req.session.weatherDescription =
                     weatherData.weather[0].description;
@@ -55,7 +77,7 @@ app.post("/", (req, res) => {
                 req.session.temp = weatherData.main.temp;
                 req.session.country = weatherData.sys.country;
             }
-            res.redirect("/");
+            res.send("data successfully stored in session , redirect to /");
         });
     });
 });

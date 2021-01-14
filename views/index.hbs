@@ -15,16 +15,13 @@
 
 <body>
     <div class="container">
-        <form action="/" method="post" class="form">
-            <div class="input-group mb-3">
-                <textarea type="text" class="form-control input-city" placeholder="City Name"
-                    aria-label="Recipient's username" aria-describedby="button-addon2" name="city_name" id="city"
-                    rows="1"></textarea>
-                <button class="btn btn-dark" type="submit" id="button-addon2">Search</button>
-            </div>
-            <ul class="suggestions list-group">
-            </ul>
-        </form>
+        <div class="input-group mb-3">
+            <textarea type="text" class="form-control input-city" placeholder="City Name" name="city_name"
+                rows="1"></textarea>
+            <button class="btn btn-dark" id="btnSearch">Search</button>
+        </div>
+        <ul class="suggestions list-group">
+        </ul>
         {{#if city }}
         <div class="card mx-auto">
             <img src="{{imageUrl}}" class="card-img-top" alt="...">
@@ -33,6 +30,8 @@
                 <p class="card-text">
                     {{weatherDescription}}
                 </p>
+                <hr>
+                <p class="card-text"><b>Location:</b> {{location}}</p>
                 <p class="card-footer"> <b>Temp:</b> {{temp}} <sup>o</sup>C</p>
             </div>
         </div>

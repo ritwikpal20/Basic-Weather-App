@@ -1,6 +1,8 @@
 # Weather App
 
-This app is based on how a server makes request to external server of [OpenWeatherMap](https://openweathermap.org/) to fetch data , and about setting up API Keys.
+This app is based on how a server makes request to external server of [OpenWeatherMap](https://openweathermap.org/) to fetch data , and about setting up API Keys.This app also auto suggest places as user types with help of [Here Geocoding & Search API](https://developer.here.com/documentation/geocoding-search-api/dev_guide/index.html).
+
+-   Give access to location for better auto suggest places.
 
 ## Development on local machine
 
