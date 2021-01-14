@@ -42,7 +42,7 @@ body {
 
 @media (max-width: 450px) {
     .card {
-        width: 12rem;
+        width: 13rem;
     }
 }
 @media (max-width: 1000px) {
