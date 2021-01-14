@@ -15,17 +15,18 @@
 
 <body>
     <div class="container">
-        <form action="/" method="post">
-            {{!-- <input type="text" name="city_name" id="city">
-            <input type="submit" value="Go"> --}}
+        <form action="/" method="post" class="form">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="City Name" aria-label="Recipient's username"
-                    aria-describedby="button-addon2" name="city_name" id="city">
+                <textarea type="text" class="form-control input-city" placeholder="City Name"
+                    aria-label="Recipient's username" aria-describedby="button-addon2" name="city_name" id="city"
+                    rows="1"></textarea>
                 <button class="btn btn-dark" type="submit" id="button-addon2">Search</button>
             </div>
+            <ul class="suggestions list-group">
+            </ul>
         </form>
         {{#if city }}
-        <div class="card m-auto">
+        <div class="card mx-auto">
             <img src="{{imageUrl}}" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">{{city}} ,<span class="text-muted text-small">{{country}}</span></h5>
@@ -36,13 +37,16 @@
             </div>
         </div>
         {{else}}
-        <h1>No City Found</h1>
+        <p style="margin-top: 2rem;font-size:1.2rem">No weather details retreived</p>
         {{/if}}
     </div>
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
         crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="/public/autosuggest.js"></script>
 </body>
 
 </html>

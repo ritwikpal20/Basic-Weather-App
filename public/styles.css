@@ -17,26 +17,37 @@ body {
 .container {
     text-align: center;
 }
-.input-group {
+.input-group,
+.suggestions {
     margin: auto;
     width: 50%;
 }
 .card {
     width: 18rem;
+    margin-top: 2rem;
 }
 .card-img-top {
     width: 100px;
     display: inline-block;
     margin: auto;
 }
+.suggestions {
+    margin-top: -12px;
+    text-align: left;
+}
+.suggested-place:hover {
+    color: white;
+    background-color: rgb(76, 76, 245);
+}
 
 @media (max-width: 450px) {
     .card {
-        width: 10rem;
+        width: 12rem;
     }
 }
 @media (max-width: 1000px) {
-    .input-group {
+    .input-group,
+    .suggestions {
         width: 100%;
     }
 }
