@@ -10,7 +10,8 @@ This requires setting up a .env file ,which may contain private key, passwords,e
 
 ```
 NODE_ENV= development
-API_KEY= *Your API key from OpenWeatherMap *
+OWM_API_KEY= *Your API key from OpenWeatherMap *
+HERE_API_KEY
 SECRET_STRING=*Your secret string for encrypting cookies*
 ```
 

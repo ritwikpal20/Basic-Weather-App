@@ -23,32 +23,37 @@ app.use(
 app.get("/", async (req, res) => {
     //if the user already has a city name or latitude,longitude saved in cookie , show temperation of that city by default
     if (req.session.visit) {
-        if (req.session.lat & req.session.lng) {
-            url = `https://api.openweathermap.org/data/2.5/weather?lat=${req.session.lat}&lon=${req.session.lng}&appid=${process.env.API_KEY}&units=metric`;
+        if (req.session.lat && req.session.lng) {
+            url = `https://api.openweathermap.org/data/2.5/weather?lat=${req.session.lat}&lon=${req.session.lng}&appid=${process.env.OWM_API_KEY}&units=metric`;
         } else if (req.session.city) {
-            url = `https://api.openweathermap.org/data/2.5/weather?q=${req.session.city}&appid=${process.env.API_KEY}&units=metric`;
+            url = `https://api.openweathermap.org/data/2.5/weather?q=${req.session.city}&appid=${process.env.OWM_API_KEY}&units=metric`;
+        } else {
+            res.render("index");
         }
-        await https.get(url, (response) => {
-            response.on("data", function (data) {
-                const weatherData = JSON.parse(data);
-                if (weatherData.cod == "404" || weatherData.cod == "400") {
-                    req.session.city = null;
-                } else {
-                    req.session.weatherDescription =
-                        weatherData.weather[0].description;
-                    req.session.imageUrl = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
-                    req.session.temp = weatherData.main.temp;
-                }
+        if ((req.session.lat && req.session.lng) || req.session.city) {
+            https.get(url, (response) => {
+                response.on("data", function (data) {
+                    const weatherData = JSON.parse(data);
+                    if (weatherData.cod == "404" || weatherData.cod == "400") {
+                        req.session.city = null;
+                        res.render("index");
+                    } else {
+                        req.session.weatherDescription =
+                            weatherData.weather[0].description;
+                        req.session.imageUrl = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
+                        req.session.temp = weatherData.main.temp;
+                        res.render("index", {
+                            city: req.session.city,
+                            weatherDescription: req.session.weatherDescription,
+                            imageUrl: req.session.imageUrl,
+                            temp: req.session.temp,
+                            country: req.session.country,
+                            location: req.session.location,
+                        });
+                    }
+                });
             });
-        });
-        res.render("index", {
-            city: req.session.city,
-            weatherDescription: req.session.weatherDescription,
-            imageUrl: req.session.imageUrl,
-            temp: req.session.temp,
-            country: req.session.country,
-            location: req.session.location,
-        });
+        }
     } else {
         req.session.visit = true;
         res.render("index");
@@ -57,9 +62,9 @@ app.get("/", async (req, res) => {
 
 app.post("/", (req, res) => {
     if (req.body.lat & req.body.lng) {
-        url = `https://api.openweathermap.org/data/2.5/weather?lat=${req.body.lat}&lon=${req.body.lng}&appid=${process.env.API_KEY}&units=metric`;
+        url = `https://api.openweathermap.org/data/2.5/weather?lat=${req.body.lat}&lon=${req.body.lng}&appid=${process.env.OWM_API_KEY}&units=metric`;
     } else {
-        url = `https://api.openweathermap.org/data/2.5/weather?q=${req.body.city_name}&appid=${process.env.API_KEY}&units=metric`;
+        url = `https://api.openweathermap.org/data/2.5/weather?q=${req.body.city_name}&appid=${process.env.OWM_API_KEY}&units=metric`;
     }
     https.get(url, (response) => {
         response.on("data", function (data) {
@@ -80,6 +85,17 @@ app.post("/", (req, res) => {
             res.send("data successfully stored in session , redirect to /");
         });
     });
+});
+
+app.post("/autosuggest", (req, res) => {
+    if (req.body.city) {
+        url = `https://autosuggest.search.hereapi.com/v1/autosuggest?at=${req.body.lt},${req.body.lg}&limit=5&lang=en&q=${req.body.city}&apiKey=${process.env.HERE_API_KEY}`;
+        https.get(url, (response) => {
+            response.on("data", function (data) {
+                res.send(data);
+            });
+        });
+    }
 });
 
 const PORT = process.env.PORT || 3000;
