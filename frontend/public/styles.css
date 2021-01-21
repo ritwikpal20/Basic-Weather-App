@@ -1,0 +1,53 @@
+body {
+    height: 100vh;
+    margin: 2rem;
+    padding: 2rem;
+    /* overflow: hidden; */
+    background-image: linear-gradient(
+        to right top,
+        #051937,
+        #004d7a,
+        #008793,
+        #00bf72,
+        #a8eb12
+    );
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.container {
+    text-align: center;
+}
+.input-group,
+.suggestions {
+    margin: auto;
+    width: 50%;
+}
+.card {
+    width: 18rem;
+    margin-top: 2rem;
+}
+.card-img-top {
+    width: 100px;
+    display: inline-block;
+    margin: auto;
+}
+.suggestions {
+    margin-top: -12px;
+    text-align: left;
+}
+.suggested-place:hover {
+    color: white;
+    background-color: rgb(76, 76, 245);
+}
+
+@media (max-width: 450px) {
+    .card {
+        width: 13rem;
+    }
+}
+@media (max-width: 1000px) {
+    .input-group,
+    .suggestions {
+        width: 100%;
+    }
+}
