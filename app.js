@@ -117,13 +117,17 @@ app.post("/fetch-data", (req, res) => {
 });
 
 app.post("/autosuggest", (req, res) => {
+    console.log(req.body.city);
     if (req.body.city) {
         url = `https://autosuggest.search.hereapi.com/v1/autosuggest?at=${req.body.lt},${req.body.lg}&limit=5&lang=en&q=${req.body.city}&apiKey=${process.env.HERE_API_KEY}`;
         https.get(url, (response) => {
             response.on("data", (data) => {
+                console.log(data);
                 res.send(data);
             });
         });
+    } else {
+        res.send("{}");
     }
 });
 
